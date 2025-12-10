@@ -1,12 +1,63 @@
+# -------------------------------------------------------------------
+# Logs y Archivos de Depuración
+# -------------------------------------------------------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# -------------------------------------------------------------------
+# Dependencias y Construcción (Build)
+# -------------------------------------------------------------------
+# Módulos de Node (Backend y Frontend)
+node_modules
+
+# Archivos de build generados
+dist
+dist-ssr
+/build
+.vite # Cache de Vite
+*.local
+
+# -------------------------------------------------------------------
+# Variables de Entorno y Secretos
+# -------------------------------------------------------------------
+.env
+.env.*
+
+# -------------------------------------------------------------------
+# Configuraciones de IDEs y OS
+# -------------------------------------------------------------------
+.vscode/*
+!.vscode/extensions.json # Excepto este archivo de configuración
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.user
 .vs/
 
+# -------------------------------------------------------------------
+# Carpetas Binarias y de Test
+# -------------------------------------------------------------------
 FuckHugo/
 x64/
 
-*.suo
-*.user
-*.log
+# -------------------------------------------------------------------
+# Archivos Generales a Excluir (Evitando redundancia)
+# -------------------------------------------------------------------
 *.txt
 *.git
 
+# -------------------------------------------------------------------
+# Archivos Sensibles del Proyecto (Configuración/C2)
+# -------------------------------------------------------------------
 src/assets/certificates
+src/assets/strings
+src/assets/keys
