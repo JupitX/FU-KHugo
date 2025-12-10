@@ -20,7 +20,7 @@
     {
       "filename": "info.cpp",
       "run": {
-        "process": "None"
+        "command": "None"
       },
       "build": {
         "libraries": []
