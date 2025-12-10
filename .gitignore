@@ -1,0 +1,12 @@
+.vs/
+
+FuckHugo/
+x64/
+
+*.suo
+*.user
+*.log
+*.txt
+*.git
+
+src/assets/certificates
