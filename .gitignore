@@ -10,3 +10,5 @@ x64/
 *.git
 
 src/assets/certificates
+src/assets/keys
+src/assets/strings
