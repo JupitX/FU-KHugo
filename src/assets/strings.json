@@ -1,0 +1,30 @@
+{
+  "scripts": [
+    {
+      "filename": "socket.cpp",
+      "run": {
+        "command": "cmd.exe",
+        "server": {
+          "ip": "172.17.25.182",
+          "port": 443
+        }
+      },
+      "build": {
+        "libraries": [
+          "ws2_32.lib",
+          "libssl.lib",
+          "libcrypto.lib"
+        ]
+      }
+    },
+    {
+      "filename": "info.cpp",
+      "run": {
+        "process": "None"
+      },
+      "build": {
+        "libraries": []
+      }
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="FuckHugo.vcxproj" Id="b73dfc08-e86c-4d96-80e0-cb44df99f9ba" />
+</Solution>
