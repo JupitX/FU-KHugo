@@ -44,31 +44,3 @@ function Get-JsonElements {
 
     return $elements
 }
-
-function Get-Key {
-    param(
-        [Parameter(Mandatory)]
-        $Bytes
-    )
-
-    $key = New-Object byte[] $Bytes
-
-    [System.Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($key)
-
-    return $key
-}
-
-function Get-HexKey {
-    param(
-        [Parameter(Mandatory)]
-        $Key
-    )
-
-    $hexadecimal = ""
-
-    ForEach ($byte in $Key) {
-        $hexadecimal += $byte.ToString("X2")
-    }
-
-    return $hexadecimal
-}
