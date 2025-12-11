@@ -35,3 +35,19 @@ function Parse-JsonElements {
 
     return $elementObjects
 }
+
+function Parse-Key {
+    param(
+        [Parameter(Mandatory)]
+        $Hexadecimal
+    )
+
+    $byteCount = $Hexadecimal.Length / 2
+    $byteArray = New-Object byte[] ($Hexadecimal.Length / 2)
+
+    for ($counter = 0; $counter -lt $byteCount; $counter++) {
+        $byteArray[$counter] = [Convert]::ToByte($hexadecimalKey.Substring($counter * 2, 2), 16)
+    }
+
+    return $byteArray
+}

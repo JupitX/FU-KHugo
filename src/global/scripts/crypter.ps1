@@ -7,38 +7,79 @@ $stringsFilepath = "$assetsFolderpath\strings.json"
 $stringsContent = Get-Content $stringsFilepath -Raw -Encoding UTF8
 $stringsObject = ConvertFrom-Json -InputObject $stringsContent
 
-$key = Get-Key -Bytes 32
-$iv = Get-Key -Bytes 16
+$keyFiles = (Get-ChildItem -Path $keysFolderpath -Filter *.json).FullName
 
-$hexKey = Get-HexKey -Key $key
-$hexIV = Get-HexKey -Key $iv
+ForEach ($keyFile in $keyFiles) {
+	$keyContent = Get-Content $keyFile -Raw -Encoding UTF8
+	$keyContent = ConvertFrom-Json $keyContent
 
-ForEach ($script in $stringsObject.scripts) {
+	$hexadecimalKey = $keyContent.Key
+	$hexadecimalIV = $keyContent.IV
+	$id = $keyFile.Split('\')[-1].Replace('.json','')
 
-	$elements = Get-JsonElements -Object $script
-	$elements = Parse-JsonElements -Elements $elements
+	$key = Parse-Key -Hexadecimal $hexadecimalKey
+	$iv = Parse-Key -Hexadecimal $hexadecimalIV
 
-	ForEach ($element in $elements) {
-		$allProperties = $element.PSObject.Properties.Name
-		$properties = $allProperties[1 .. ($allProperties.Count - 1)]
+	ForEach ($script in $stringsObject.scripts) {
 
-		$scriptName = $element.script
+		$elements = Get-JsonElements -Object $script
+		$elements = Parse-JsonElements -Elements $elements
 
-		ForEach ($property in $properties) {
-			$string = $element.$property
+		ForEach ($element in $elements) {
 
-			$aes = [System.Security.Cryptography.Aes]::Create()
+			$cipherFileContent = ""
+			$cipherFileContent += "#pragma once`n"
+			$cipherFileContent += "`n"
+			$cipherFileContent += "#include <array>`n"
+			$cipherFileContent += "#include <cstdint>`n"
+			$cipherFileContent += "`n"
+			$cipherFileContent += "namespace ciphertexts {`n"
+			$cipherFileContent += "`n"
 
-			$aes.Key = $key
-			$aes.IV = $iv
-			$aes.Mode = "CBC"
-			$aes.Padding = "PKCS7"
+			$allProperties = $element.PSObject.Properties.Name
+			$properties = $allProperties[1 .. ($allProperties.Count - 1)]
 
-			$bytes = [System.Text.Encoding]::UTF8.GetBytes($string)
+			$scriptName = $element.script
+			$scriptCleanName = ($scriptName.Split("."))[0]
 
-			$encryptor = $aes.CreateEncryptor()
-			$cipherbytes = $encryptor.TransformFinalBlock($bytes, 0, $bytes.Length)
+			$cipherStringScriptNameFolder = "$cipherStringFolderpath\$scriptCleanName"
 
+			if (-not (Test-Path $cipherStringScriptNameFolder)) {
+				New-Item -Path $cipherStringFolderpath -Name $scriptCleanName -ItemType "Directory" | Out-Null
+			}
+
+			$cipherStringFilepath = "$cipherStringScriptNameFolder\$id.hpp"
+
+			ForEach ($property in $properties) {
+
+				$string = $element.$property
+
+				if (($property -Like '*[[]*') -or ($property -Like '*[]]*')) {
+					$property = $property -replace '[\[\]]', ''
+				}
+
+				$aes = [System.Security.Cryptography.Aes]::Create()
+
+				$aes.Key = $key
+				$aes.IV = $iv
+				$aes.Mode = "CBC"
+				$aes.Padding = "PKCS7"
+
+				$bytes = [System.Text.Encoding]::UTF8.GetBytes($string)
+
+				$encryptor = $aes.CreateEncryptor()
+				$cipherbytes = $encryptor.TransformFinalBlock($bytes, 0, $bytes.Length)
+				$hexadecimalCiphertext = ($cipherbytes | ForEach-Object { "0x{0:X2}" -f $_ }) -join ", "
+
+				$cipherFileContent += "`tconstexpr std::array<uint8_t, $($cipherbytes.Length)> $($property.ToUpper()) = {`n"
+				$cipherFileContent += "`t`t$hexadecimalCiphertext`n"
+				$cipherFileContent += "`t`};`n"
+				$cipherFileContent += "`t`n"
+			}
 		}
+
+		$cipherFileContent += "`}"
+
+		Set-Content -Path $cipherStringFilepath -Value $cipherFileContent -Encoding UTF8
 	}
 }
