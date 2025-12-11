@@ -35,7 +35,7 @@ dist-ssr
 # -------------------------------------------------------------------
 # Configuraciones de IDEs y OS
 # -------------------------------------------------------------------
-.vscode/*
+.vscode
 !.vscode/extensions.json # Excepto este archivo de configuración
 .idea
 .DS_Store
