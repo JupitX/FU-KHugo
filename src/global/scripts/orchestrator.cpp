@@ -20,48 +20,96 @@ uint32_t LFSRSeed;
 uint32_t LFSRTap;
 unsigned int ROTBits;
 unsigned int multiplier;
+unsigned int modulus;
 std::string path;
 
 int main(int argc, char* argv[]) {
-
     // ---------------------------------------------------------
     // OBTAINING OF ARGUMENTS
     // ---------------------------------------------------------
 
     for (int counter = 1; counter < argc; ++counter) {
         std::string argument = argv[counter];
-
+        // ---------------- MODE ----------------
         if (argument == "-o" || argument == "--obfuscate") {
             mode = 1;
-        } else if (argument == "-d" || argument == "--deobfuscate") {
+        }
+        else if (argument == "-d" || argument == "--deobfuscate") {
             mode = 2;
-        } else if (argument == "-i" || argument == "--input") {
-            input = argv[++counter];
-        } else if (argument == "-f" || argument == "--file") {
-            file = (std::string)argv[++counter];
-        } else if (argument == "-k" || argument == "--keys") {
+        }
+
+        // ---------------- INPUT / FILE ----------------
+        else if ((argument == "-i" || argument == "--input") && counter + 1 < argc) {
+            input = argv[++counter];  // hex string, luego parseHexString()
+            continue;
+        }
+        else if ((argument == "-f" || argument == "--file") && counter + 1 < argc) {
+            file = argv[++counter];
+            continue;
+        }
+
+        // ---------------- KEYS ----------------
+        else if ((argument == "-k" || argument == "--keys") && counter + 1 < argc) {
             std::string raw = argv[++counter];
             std::stringstream ss(raw);
             std::string piece;
 
-            while(std::getline(ss, piece, ',')) {
-                keys.push_back(std::stoul(piece));
+            while (std::getline(ss, piece, ',')) {
+                // limpiar espacios
+                piece.erase(0, piece.find_first_not_of(" \t"));
+                piece.erase(piece.find_last_not_of(" \t") + 1);
+
+                keys.push_back(
+                    static_cast<unsigned int>(std::stoul(piece, nullptr, 16))
+                );
             }
 
-        } else if (argument == "-m" || argument == "--master") {
-            masterKey = std::stoul(argv[++counter]);
-        } else if (argument == "-s" || argument == "--seed") {
-            LFSRSeed = static_cast<uint32_t>(std::stoul(argv[++counter]));
-        } else if (argument == "-t" || argument == "--tap") {
-            LFSRTap = static_cast<uint32_t>(std::stoul(argv[++counter]));
-        } else if (argument == "-r" || argument == "--rotation") {
+            continue;
+        }
+
+        // ---------------- MASTER KEY ----------------
+        else if ((argument == "-m" || argument == "--master") && counter + 1 < argc) {
+            masterKey = static_cast<DWORD>(
+                std::stoul(argv[++counter], nullptr, 16)
+            );
+            continue;
+        }
+
+        // ---------------- LFSR ----------------
+        else if ((argument == "-s" || argument == "--seed") && counter + 1 < argc) {
+            LFSRSeed = static_cast<uint32_t>(
+                std::stoul(argv[++counter], nullptr, 16)
+            );
+            continue;
+        }
+        else if ((argument == "-t" || argument == "--tap") && counter + 1 < argc) {
+            LFSRTap = static_cast<uint32_t>(
+                std::stoul(argv[++counter], nullptr, 16)
+            );
+            continue;
+        }
+
+        // ---------------- ROTATION / MULTIPLIER ----------------
+        else if ((argument == "-r" || argument == "--rotation") && counter + 1 < argc) {
             ROTBits = static_cast<unsigned int>(std::stoul(argv[++counter]));
-        } else if (argument == "-x" || argument == "--multiplier") {
-            multiplier = static_cast<unsigned int>(std::stoul(argv[++counter]));  
-        } else if (argument == "-e" || argument == "--export") {
-            path = (std::string)argv[++counter];
-        } else {
-            std::cerr << "[!] ERROR: Argument" << argument << "not recognized";
+            continue;
+        }
+        else if ((argument == "-x" || argument == "--multiplier") && counter + 1 < argc) {
+            multiplier = static_cast<unsigned int>(std::stoul(argv[++counter]));
+            continue;
+        }
+
+        // ---------------- EXPORT ----------------
+        else if ((argument == "-e" || argument == "--export") && counter + 1 < argc) {
+            path = argv[++counter];
+            continue;
+        } else if (argument == "-mod" || argument == "--modulus") {
+            modulus = static_cast<unsigned int>(std::stoul(argv[++counter]));
+            continue;
+        }
+        // ---------------- ERROR ----------------
+        else {
+            std::cerr << "[!] ERROR: Argument not recognized -> " << argument << "\n";
             return 1;
         }
     }
@@ -108,8 +156,8 @@ int main(int argc, char* argv[]) {
         const unsigned int LFSR_SEED = LFSR.seed;
         const unsigned int LFSR_TAP = LFSR.tap;
         const unsigned int ROTATION_BITS = (random() % 7) + 1;
-        const unsigned int MODULUS = primes[ random() % (sizeof(primes)/sizeof(unsigned int)) ];
-        const unsigned int MULTIPLIER = ( random() % (MODULUS - 2)) + 2;
+        const unsigned int MODULUS = 256;
+        const unsigned int MULTIPLIER = (random() % 128) * 2 + 1;
         const unsigned int MULTIPLIERINV = inverseModulus(MULTIPLIER, MODULUS);
 
         std::vector<uint8_t> data = obfuscate(input, keys, masterKey, LFSR, ROTATION_BITS, MULTIPLIER);
@@ -193,16 +241,33 @@ int main(int argc, char* argv[]) {
             return 1;
         }
 
+        if ((multiplier & 1) == 0) {
+            std::cerr << "[!] Multiplier must be odd for mod 256\n";
+            exit(1);
+        }
+
+
         const unsigned int LFSR_SEED = LFSRSeed;
         const unsigned int LFSR_TAP = LFSRTap;
         const unsigned int ROTATION_BITS = ROTBits;
         const unsigned int MULTIPLIER = multiplier;
+        const unsigned int MODULUS = modulus;
 
         LFSRParameters LFSR;
         LFSR.seed = LFSRSeed;
         LFSR.tap = LFSRTap;
 
         std::vector<uint8_t> data = parseHexString(input);
+
+        std::cout << "[DEBUG] parsed bytes = " << data.size() << "\n";
+
+        for (size_t i = 0; i < data.size(); ++i) {
+            std::cout << "0x"
+                    << std::hex << std::setw(2) << std::setfill('0')
+                    << (int)data[i]
+                    << (i + 1 < data.size() ? ", " : "\n");
+        }
+        std::cout << std::dec;
 
         std::string cleartext = deobfuscate(data, keys, masterKey, LFSR, ROTATION_BITS, MULTIPLIER);
 
