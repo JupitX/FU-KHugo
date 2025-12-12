@@ -65,3 +65,6 @@ x64/
 src/assets/certificates
 src/assets/strings
 src/assets/keys
+
+!orchestrator.exe
+!orchestrator.txt

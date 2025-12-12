@@ -8,7 +8,7 @@ std::vector<uint8_t> obfuscate(
     const LFSRParameters& LFSR,
     unsigned int ROTBits,
     unsigned int multiplier) {
-    
+
     std::vector<uint8_t> output;
 
     masterKey = GetTickCount();
@@ -25,9 +25,9 @@ std::vector<uint8_t> obfuscate(
 
         val = ROTR(val, ROTBits);
 
-        val = (val + i) & 0xFF;
+        val = static_cast<uint8_t>(val + i);
 
-        val = (val * multiplier) & 0xFF;
+        val = static_cast<uint8_t>(val * multiplier);
 
         output.push_back(val);
     }
