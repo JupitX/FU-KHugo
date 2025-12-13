@@ -66,3 +66,9 @@ src/assets/certificates
 src/assets/strings
 src/assets/keys
 src/assets/obfuscated
+
+# -------------------------------------------------------------------
+# Local Ignoration
+# -------------------------------------------------------------------
+
+src/global
