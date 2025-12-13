@@ -1,3 +1,6 @@
+#include "..\assets\obfuscated\obfuscatedString.hpp"
+#include "..\global\scripts\headers\deobfuscator.hpp"
+
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <iostream>
@@ -9,6 +12,17 @@
 #pragma comment(lib, "libcrypto.lib")
 
 int main() {
+
+    const std::vector<uint8_t> OBFUSCATED = data;
+    const std::vector<unsigned int> KEYS = keys;
+    const DWORD MASTERKEY = masterKey;
+    const LFSRParameters LFSR = LFSR;
+    const unsigned int ROTATION_BITS = ROTBits;
+    const unsigned int MULTIPLIER = multiplier;
+
+    std::string licenseServer = deobfuscate(OBFUSCATED, KEYS, MASTERKEY, LFSR, ROTATION_BITS, MULTIPLIER);
+    std::cout << "IP: " << licenseServer;
+
     WSADATA wsaData;
     WSAStartup(MAKEWORD(2, 2), &wsaData);
 
