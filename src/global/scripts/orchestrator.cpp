@@ -6,10 +6,12 @@
 #include "headers\lfsr.hpp"
 
 #include <iostream>
+#include <fstream>
 #include <iomanip>
 #include <string>
 #include <vector>
 #include <windows.h>
+#include <filesystem>
 
 unsigned int mode = 0;
 std::string input;
@@ -22,6 +24,11 @@ unsigned int ROTBits;
 unsigned int multiplier;
 unsigned int modulus;
 std::string path;
+
+std::filesystem::path obfuscatedPath = std::filesystem::path("..") / ".." / "assets" / "obfuscated";
+
+std::filesystem::path obfuscatedHeaderPath = std::filesystem::path(obfuscatedPath) / "obfuscatedStrings.hpp";
+std::filesystem::path obfuscatedScriptPath = std::filesystem::path(obfuscatedPath) / "obfuscatedStrings.cpp";
 
 int main(int argc, char* argv[]) {
     // ---------------------------------------------------------
@@ -103,7 +110,7 @@ int main(int argc, char* argv[]) {
         else if ((argument == "-e" || argument == "--export") && counter + 1 < argc) {
             path = argv[++counter];
             continue;
-        } else if (argument == "-mod" || argument == "--modulus") {
+        } else if (argument == "--mod") {
             modulus = static_cast<unsigned int>(std::stoul(argv[++counter]));
             continue;
         }
@@ -161,12 +168,19 @@ int main(int argc, char* argv[]) {
         const unsigned int MULTIPLIERINV = inverseModulus(MULTIPLIER, MODULUS);
 
         std::vector<uint8_t> data = obfuscate(input, keys, masterKey, LFSR, ROTATION_BITS, MULTIPLIER);
+        
+        std::vector<uint8_t> hexData;
+        hexData.reserve(data.size());
+
+        for (size_t i = 0; i < data.size(); i++) {
+            hexData.push_back(static_cast<uint8_t>(data[i]));
+        }
             
         std::cout << "------------------------------\n";
         std::cout << "--- OBFUSCATION PARAMETERS ---\n";
         std::cout << "------------------------------\n\n";
         std::cout << "LFSR_SEED: 0x" << std::hex << LFSR_SEED << std::dec << " // " << LFSR_SEED << "\n";
-        std::cout << "LFSR_TAP:  0x" << std::hex << LFSR_TAP << std::dec << " // " << LFSR_TAP << "\n";
+        std::cout << "LSR_TAP:  0x" << std::hex << LFSR_TAP << std::dec << " // " << LFSR_TAP << "\n";
         std::cout << "ROTATION_BITS: " << ROTATION_BITS << "\n";
         std::cout << "MODULUS: " << MODULUS << "\n";
         std::cout << "MULTIPLIER: " << MULTIPLIER << "\n";
@@ -190,7 +204,7 @@ int main(int argc, char* argv[]) {
             << v;
 
         if (i != data.size() - 1)
-            std::cout << ", ";
+            std::cout << ",";
         }
 
         std::cout << "\n\n";
@@ -211,6 +225,75 @@ int main(int argc, char* argv[]) {
         std::cout << "------------------------------\n\n";
         std::cout << "Master Key (DWORD): " << masterKey << "\n";
         std::cout << "Master Key (Hex): 0x" << std::hex << masterKey << std::dec << "\n";
+
+        std::ofstream header(obfuscatedHeaderPath);
+        std::ofstream script(obfuscatedScriptPath);
+
+        header << "#pragma once\n";
+        header << "\n";
+        header << "#include <string>\n";
+        header << "#include <vector>\n";
+        header << "#include <cstdint>\n";
+        header << "#include <windows.h>\n";
+        header << "\n";
+        header << "struct LFSRParameters {\n";
+        header << "\tuint32_t seed;\n";
+        header << "\tuint32_t tap;\n";
+        header << "};\n";
+        header << "\n";
+        header << "extern const LFSRParameters LFSR;\n";
+        header << "extern const unsigned int ROTBits;\n";
+        header << "extern const unsigned int modulus;\n";
+        header << "extern const unsigned int multiplier;\n";
+        header << "extern const uint8_t input;\n";
+        header << "extern const DWORD masterKey;\n";
+        header << "extern const std::vector<unsigned int> keys;\n";
+
+        script << "#include \"obfuscatedStrings.hpp\"\n";
+        script << "\n";
+        script << "#include <vector>\n";
+        script << "\n";
+        script << "const LFSRParameters LFSR {\n";
+        script << "\t0x" << std::uppercase << std::hex << LFSR_SEED << ",\n";
+        script << "\t0x" << std::uppercase << std::hex << LFSR_TAP << "\n";
+        script << "};\n";
+        script << "\n";
+        script << "const unsigned int ROTBits = " << ROTATION_BITS << ";\n";
+        script << "const unsigned int modulus = " << MODULUS << ";\n";
+        script << "const unsigned int multiplier = " << multiplier << ";\n";
+        script << "const std::vector<uint8_t> data = {";
+
+        for (size_t i = 0; i < hexData.size(); i++) {
+            script << "0x"
+                << std::uppercase
+                << std::hex
+                << std::setw(2)
+                << std::setfill('0')
+                << static_cast<int>(hexData[i]);
+
+            if (i != hexData.size() - 1) {
+                script << ",";
+            }
+        }
+
+        script << "};\n";
+        script << "const DWORD masterKey = 0x" << std::hex << masterKey << ";\n";
+        script << "const std::vector<uint32_t> keys = {";
+
+        for (size_t i = 0; i < keys.size(); i++) {
+            script << "0x"
+            << std::uppercase
+            << std::hex
+            << keys[i];
+
+            if (i == keys.size() - 1) {
+                script << "";
+            } else {
+                script << ",";
+            }
+        }
+
+        script << "};";
 
     }
 
