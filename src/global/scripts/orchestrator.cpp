@@ -27,8 +27,8 @@ std::string path;
 
 std::filesystem::path obfuscatedPath = std::filesystem::path("..") / ".." / "assets" / "obfuscated";
 
-std::filesystem::path obfuscatedHeaderPath = std::filesystem::path(obfuscatedPath) / "obfuscatedStrings.hpp";
-std::filesystem::path obfuscatedScriptPath = std::filesystem::path(obfuscatedPath) / "obfuscatedStrings.cpp";
+std::filesystem::path obfuscatedHeaderPath = std::filesystem::path(obfuscatedPath) / "obfuscatedString.hpp";
+std::filesystem::path obfuscatedScriptPath = std::filesystem::path(obfuscatedPath) / "obfuscatedString.cpp";
 
 int main(int argc, char* argv[]) {
     // ---------------------------------------------------------
