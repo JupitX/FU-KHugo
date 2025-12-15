@@ -164,7 +164,7 @@ int main(int argc, char* argv[]) {
         const unsigned int LFSR_TAP = LFSR.tap;
         const unsigned int ROTATION_BITS = (random() % 7) + 1;
         const unsigned int MODULUS = 256;
-        const unsigned int MULTIPLIER = (random() % 128) * 2 + 1;
+        unsigned int MULTIPLIER = (random() % 128) * 2 + 1;
         const unsigned int MULTIPLIERINV = inverseModulus(MULTIPLIER, MODULUS);
 
         std::vector<uint8_t> data = obfuscate(input, keys, masterKey, LFSR, ROTATION_BITS, MULTIPLIER);
@@ -249,7 +249,7 @@ int main(int argc, char* argv[]) {
         header << "extern const DWORD masterKey;\n";
         header << "extern const std::vector<unsigned int> keys;\n";
 
-        script << "#include \"obfuscatedStrings.hpp\"\n";
+        script << "#include \"obfuscatedString.hpp\"\n";
         script << "\n";
         script << "#include <vector>\n";
         script << "\n";
@@ -260,7 +260,7 @@ int main(int argc, char* argv[]) {
         script << "\n";
         script << "const unsigned int ROTBits = " << ROTATION_BITS << ";\n";
         script << "const unsigned int modulus = " << MODULUS << ";\n";
-        script << "const unsigned int multiplier = " << multiplier << ";\n";
+        script << "const unsigned int multiplier = " << std::dec << MULTIPLIER << ";\n";
         script << "const std::vector<uint8_t> data = {";
 
         for (size_t i = 0; i < hexData.size(); i++) {
