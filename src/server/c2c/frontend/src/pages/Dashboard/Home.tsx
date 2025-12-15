@@ -9,7 +9,8 @@ export default function Home() {
                 description = "This is the home page of the Fuckhugo All-In-One RAT tool"
             />
 
-            
+
+
         </>
     );
 }
