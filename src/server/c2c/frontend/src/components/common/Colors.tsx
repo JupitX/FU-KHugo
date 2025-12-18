@@ -7,7 +7,8 @@ export const Palette = {
         beige: "#E4E7EC",
         darkgray: "#1D2939",
         red: "#D92D20",
-        green: "#039855"
+        green: "#039855",
+        gray: "#383f47"
     }
 }
 
