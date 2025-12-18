@@ -3,6 +3,7 @@ import StatisticsChart from "../../components/metrics/StatisticsChart";
 import ConnectionMetrics from "../../components/metrics/ConnectionsMetrics";
 import MonthlyConnectionsChart from "../../components/metrics/MonthlyConnectionsChart";
 import MonthlyTarget from "../../components/metrics/MonthlyTarget";
+import DemographicChart from "../../components/metrics/DemographicChart";
 
 export default function Home() {
     return (
@@ -22,6 +23,14 @@ export default function Home() {
 
                 <div className="col-span-12 xl:col-span-5">
                     <MonthlyTarget/>
+                </div>
+
+                <div className="col-span-12">
+                    <StatisticsChart/>
+                </div>
+
+                <div className="col-span-12 xl:col-span-5">
+                    <DemographicChart/>
                 </div>
 
             </div>
