@@ -4,6 +4,7 @@ import ConnectionMetrics from "../../components/metrics/ConnectionsMetrics";
 import MonthlyConnectionsChart from "../../components/metrics/MonthlyConnectionsChart";
 import MonthlyTarget from "../../components/metrics/MonthlyTarget";
 import DemographicChart from "../../components/metrics/DemographicChart";
+import RecentConnections from "../../components/metrics/RecentConnections";
 
 export default function Home() {
     return (
@@ -31,6 +32,10 @@ export default function Home() {
 
                 <div className="col-span-12 xl:col-span-5">
                     <DemographicChart/>
+                </div>
+
+                <div className="col-span-12 xl:col-span-7">
+                    <RecentConnections/>
                 </div>
 
             </div>
