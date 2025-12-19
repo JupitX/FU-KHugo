@@ -2,5 +2,11 @@
   "dependencies": {
     "@react-jvectormap/core": "^1.0.4",
     "@react-jvectormap/world": "^1.1.2"
+  },
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.11",
+    "autoprefixer": "^10.4.23",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^3.4.19"
   }
 }
