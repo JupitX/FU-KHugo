@@ -117,7 +117,7 @@ export default function MonthlyTarget() {
                 </div>
 
                 <p className="mx-auto mt-10 w-full max-w-[380px] text-center text-sm text-gray-500 sm:text-base">
-                    10 extra connections today, keep going...
+                    10 extra connections today, keep going..., the job has not been done yet
                 </p>
             </div>
 

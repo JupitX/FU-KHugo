@@ -48,9 +48,8 @@ export default function NotificationDropdown() {
                 </div>
 
                 <ul className="flex flex-col h-auto overflow-y-auto custom-scrollbar">
-                    {/* Example notification items */}
                     <li>
-                        <DropdownItem onItemClick={closeDropdown} className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/5">
+                        <DropdownItem onItemClick={closeDropdown} className="flex gap-3 rounded-lg border-b border-gray-100 p-3 px-4.5 py-3 hover:bg-gray-100 dark:border-gray-800 dark:hover:bg-white/[0.05]">
 
                             <span>
                                 <img width={40} height={40} src="/images/user/user-02.jpg" alt="User" className="w-full overflow-hidden rounded-full"/>
