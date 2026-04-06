@@ -1,6 +1,7 @@
 # -------------------------------------------------------------------
-# Logs y Archivos de Depuración
+# Logs & Debug files
 # -------------------------------------------------------------------
+
 logs
 *.log
 npm-debug.log*
@@ -10,12 +11,14 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # -------------------------------------------------------------------
-# Dependencias y Construcción (Build)
+# Dependencies & Build
 # -------------------------------------------------------------------
-# Módulos de Node (Backend y Frontend)
+# Node modules (Backend & Frontend)
+
 node_modules
 
-# Archivos de build generados
+# Generated build files
+
 dist
 dist-ssr
 /build
@@ -27,16 +30,18 @@ dist-ssr
 *.pdb
 
 # -------------------------------------------------------------------
-# Variables de Entorno y Secretos
+# Secrets & Environment variables
 # -------------------------------------------------------------------
+
 .env
 .env.*
 
 # -------------------------------------------------------------------
-# Configuraciones de IDEs y OS
+# IDE & OS Configuration files
 # -------------------------------------------------------------------
+
 .vscode
-!.vscode/extensions.json # Excepto este archivo de configuración
+!.vscode/extensions.json
 .idea
 .DS_Store
 *.suo
@@ -48,25 +53,28 @@ dist-ssr
 .vs/
 
 # -------------------------------------------------------------------
-# Carpetas Binarias y de Test
+# Test & Binary folders
 # -------------------------------------------------------------------
+
 FuckHugo/
 x64/
 
 # -------------------------------------------------------------------
-# Archivos Generales a Excluir (Evitando redundancia)
+# General files
 # -------------------------------------------------------------------
 *.txt
 *.git
 *.bkp
+*.dtmp
+*.pyc
 
 # -------------------------------------------------------------------
-# Archivos Sensibles del Proyecto (Configuración/C2)
+# Sensitive project files
 # -------------------------------------------------------------------
-src/assets/certificates
-src/assets/strings
-src/assets/keys
-src/assets/obfuscated
+#src/assets/certificates
+#src/assets/strings
+#src/assets/keys
+#src/assets/obfuscated
 
 !orchestrator.exe
 !orchestrator.txt
