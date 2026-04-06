@@ -26,7 +26,7 @@
 
 ---
 
-## 🚧 Project Status: In Progress
+## 🔧 Project Status: In Progress
 
 This project is currently under constant development to end what was initialy thought.
 Objective: Complete first beta version.
