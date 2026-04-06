@@ -26,10 +26,10 @@
 
 ---
 
-## 🚧 Project Status: ON HOLD
+## 🚧 Project Status: In Progress
 
-This project is currently on hold due to a data loss incident involving
-a disk failure. Recovery of the original files is in progress.
+This project is currently under constant development to end what was initialy thought.
+Objective: Complete first beta version.
 
 ---
 
@@ -42,16 +42,6 @@ The problem? Hugo had a habit — every single time, he'd change my keyboard lay
 wallpaper, system sounds, display settings... everything. Every. Single. Time.
 
 One day I got fed up. So I decided to hit back.
-
-### FuckHugo — The Original
-The first version was born as pure revenge. Beyond the chaos Hugo inflicted on
-my system, I went further — implementing the visual mayhem inspired by the MEMZ
-virus, combined with a custom MBR overwrite that replaced the boot screen with
-an image of my choosing, permanently breaking the boot process.
-
-The infection vector? A **USB Rubber Ducky** — plug it in, game over.
-
-Hugo didn't touch my PC again after that.
 
 ### FuckHugo-NG — The Research Project
 FuckHugo worked. But it had a critical flaw: it was detectable by antivirus software.
@@ -70,16 +60,7 @@ Same infection vector: **USB Rubber Ducky**.
 
 ---
 
-## What They Do
-
-### FuckHugo
-**Languages:** PowerShell · Python
-
-| Module | Description |
-|---|---|
-| **System chaos** | Keyboard layout, wallpaper, sounds, settings — all destroyed |
-| **MEMZ-inspired payload** | Progressive visual corruption of the system |
-| **MBR Overwrite** | Custom boot screen, rendering the system unbootable |
+## What It Does
 
 ### FuckHugo-NG
 **Language:** C++
