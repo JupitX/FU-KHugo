@@ -231,23 +231,20 @@ int main(int argc, char* argv[]) {
 
         header << "#pragma once\n";
         header << "\n";
+        header << "#include \"..\\..\\global\\scripts\\headers\\lfsr.hpp\"\n";
+        header << "\n";
         header << "#include <string>\n";
         header << "#include <vector>\n";
         header << "#include <cstdint>\n";
         header << "#include <windows.h>\n";
         header << "\n";
-        header << "struct LFSRParameters {\n";
-        header << "\tuint32_t seed;\n";
-        header << "\tuint32_t tap;\n";
-        header << "};\n";
-        header << "\n";
         header << "extern const LFSRParameters LFSR;\n";
         header << "extern const unsigned int ROTBits;\n";
         header << "extern const unsigned int modulus;\n";
         header << "extern const unsigned int multiplier;\n";
-        header << "extern const uint8_t input;\n";
+        header << "extern const std::vector<uint8_t> data;\n";
         header << "extern const DWORD masterKey;\n";
-        header << "extern const std::vector<unsigned int> keys;\n";
+        header << "extern const std::vector<uint32_t> keys;\n";
 
         script << "#include \"obfuscatedString.hpp\"\n";
         script << "\n";
