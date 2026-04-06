@@ -37,7 +37,7 @@ int main() {
     CreatePipe(&hReadPipe_in, &hWritePipe_in, &sa, 0);
     CreatePipe(&hReadPipe_out, &hWritePipe_out, &sa, 0);
 
-    STARTUPINFO info = { sizeof(info) };
+    STARTUPINFOW info = { sizeof(info) };
     PROCESS_INFORMATION pi;
     info.dwFlags = STARTF_USESTDHANDLES;
     info.hStdInput = hReadPipe_in;
