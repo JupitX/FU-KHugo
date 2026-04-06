@@ -1,4 +1,4 @@
-# FuckHugo & FuckHugo-NG — Advanced Malware Research Project
+# FuckHugo — Advanced Malware Research Project
 
 > ⚠️ **LEGAL DISCLAIMER — READ BEFORE CONTINUING**
 >
